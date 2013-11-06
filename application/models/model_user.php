@@ -199,7 +199,7 @@ class model_user extends CI_Model {
 			foreach ($query->result() as $row)
 			{
 				$group[$i] = $row;
-				$group[$i]->group_photo = SERVER_BASE_URL.'/system/image/'.$group[$i]->group_photo;
+				// $group[$i]->group_photo = SERVER_BASE_URL.'/system/image/'.$group[$i]->group_photo;
 				$i++;
 			}
 			
