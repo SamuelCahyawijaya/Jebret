@@ -102,6 +102,22 @@ class User extends CI_Controller {
 			print_response($data);
 		}		
 	}
+	
+	public function get_user_event()
+	{
+		$user_id = $this->input->get('user_id');				
+		if (!$user_id)
+		{
+			print_error(INCOMPLETE_PARAMETER_ERROR);
+			return;
+		}
+
+		$data = $this->model_user->get_user_event($user_id);
+		if($data)
+		{
+			print_response($data);
+		}		
+	}
 		
 	public function get_user_info()
 	{

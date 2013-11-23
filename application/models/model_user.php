@@ -207,6 +207,56 @@ class model_user extends CI_Model {
 		}
 	}
 		
+	public function get_user_event($user_id)
+	{
+		$this->db->trans_begin();
+
+		$data = array(
+			'user_id' => $user_id
+		);
+		
+		$this->db->select('event_id');
+		$this->db->from('user_event');
+		$this->db->where($data);
+		$query = $this->db->get();
+		if ($query->num_rows() == 0)
+		{
+			print_error(NO_RESULT_ERROR);
+			return null;
+		}
+		
+		$i = 0;
+		foreach ($query->result_array() as $row)
+		{
+			$event_ids[$i] = $row['event_id'];
+			$i++;
+		}
+		
+		$this->db->from('event');
+		$this->db->where_in('event_id', $event_ids);
+		$query = $this->db->get();
+	
+		if ($this->db->trans_status() === FALSE)
+		{
+			$this->db->trans_rollback();
+			print_error(DATABASE_ERROR);
+			return null;
+		}
+		else
+		{	
+			$this->db->trans_commit();
+			$i = 0;
+			foreach ($query->result() as $row)
+			{
+				$event[$i] = $row;
+				// $group[$i]->group_photo = SERVER_BASE_URL.'/system/image/'.$group[$i]->group_photo;
+				$i++;
+			}
+			
+			return $event;
+		}
+	}
+		
 	public function get_user_info($user_id)
 	{
 		$this->db->trans_begin();
